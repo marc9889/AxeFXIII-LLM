@@ -1,1 +1,989 @@
 
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Axe-Fx III LLM Controller — Windows .NET and OpenCode Guide</title>
+    <style>
+        :root {
+            --navy: #123047;
+            --blue: #1f5f8b;
+            --light-blue: #eaf4fb;
+            --gray: #f4f6f8;
+            --border: #c9d2d9;
+            --text: #1d252c;
+            --muted: #58646e;
+            --green: #e8f4ea;
+            --yellow: #fff7d6;
+            --red: #fcebea;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            color: var(--text);
+            font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.45;
+            margin: 0 auto;
+            max-width: 8.5in;
+            padding: 0.55in;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--navy);
+            line-height: 1.2;
+            margin-top: 1.35em;
+        }
+
+        h1 {
+            border-bottom: 3px solid var(--blue);
+            font-size: 24pt;
+            margin-top: 0;
+            padding-bottom: 0.18in;
+        }
+
+        h2 {
+            border-bottom: 1px solid var(--border);
+            font-size: 16pt;
+            padding-bottom: 0.08in;
+        }
+
+        h3 {
+            font-size: 12.5pt;
+            margin-bottom: 0.35em;
+        }
+
+        h4 {
+            font-size: 11pt;
+            margin-bottom: 0.2em;
+        }
+
+        p, li {
+            max-width: 100%;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 12pt;
+            margin-top: -0.1in;
+        }
+
+        .meta {
+            color: var(--muted);
+            font-size: 9.5pt;
+            margin-top: 0.25in;
+        }
+
+        .bluf, .note, .warning, .success {
+            border-left: 5px solid var(--blue);
+            border-radius: 4px;
+            margin: 0.2in 0;
+            padding: 0.14in 0.18in;
+        }
+
+        .bluf {
+            background: var(--light-blue);
+        }
+
+        .note {
+            background: var(--gray);
+            border-left-color: #77838d;
+        }
+
+        .warning {
+            background: var(--yellow);
+            border-left-color: #bd8b00;
+        }
+
+        .success {
+            background: var(--green);
+            border-left-color: #388545;
+        }
+
+            .warning strong,
+            .bluf strong,
+            .note strong,
+            .success strong {
+                display: inline-block;
+                margin-bottom: 0.04in;
+            }
+
+        code {
+            background: #edf1f4;
+            border-radius: 3px;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 9pt;
+            padding: 0.08em 0.24em;
+        }
+
+        pre {
+            background: #17212b;
+            border-radius: 5px;
+            color: #f3f7fa;
+            margin: 0.14in 0;
+            overflow-x: auto;
+            padding: 0.16in;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+            pre code {
+                background: transparent;
+                color: inherit;
+                font-size: 8.5pt;
+                padding: 0;
+            }
+
+        table {
+            border-collapse: collapse;
+            margin: 0.14in 0;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.08in;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: var(--light-blue);
+            color: var(--navy);
+        }
+
+        ul, ol {
+            padding-left: 0.28in;
+        }
+
+        .toc {
+            background: var(--gray);
+            border: 1px solid var(--border);
+            margin: 0.25in 0;
+            padding: 0.12in 0.22in;
+        }
+
+            .toc ol {
+                columns: 2;
+                margin-bottom: 0;
+            }
+
+            .toc a {
+                color: var(--blue);
+                text-decoration: none;
+            }
+
+        .architecture {
+            background: #fbfcfd;
+            border: 1px solid var(--border);
+            font-family: Consolas, "Courier New", monospace;
+            padding: 0.18in;
+            text-align: center;
+            white-space: pre-wrap;
+        }
+
+        .checklist li {
+            list-style: none;
+            margin: 0.05in 0;
+        }
+
+            .checklist li::before {
+                content: "☐ ";
+                font-size: 12pt;
+                margin-right: 0.04in;
+            }
+
+        .page-break {
+            break-before: page;
+            page-break-before: always;
+        }
+
+        .no-break {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 8.5pt;
+            margin-top: 0.35in;
+            padding-top: 0.12in;
+        }
+
+        @media print {
+            body {
+                font-size: 10pt;
+                max-width: none;
+                padding: 0;
+            }
+
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+            h1, h2, h3 {
+                break-after: avoid;
+                page-break-after: avoid;
+            }
+
+            pre, table, .bluf, .note, .warning, .success, .architecture {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Axe-Fx III LLM Controller</h1>
+        <p class="subtitle">Windows 10+ · C#/.NET · OpenCode · USB MIDI</p>
+        <p class="meta">
+            Purpose: Build a safe, local application that lets an LLM select
+            approved Fractal Axe-Fx III MIDI actions without allowing unrestricted
+            MIDI, SysEx, preset writes, or global configuration changes.
+        </p>
+    </header>
+
+    <section class="bluf">
+        <strong>Bottom Line.</strong><br>
+        Use OpenCode as a development assistant, not as the live controller.
+        The finished C#/.NET application runs natively on Windows, validates each
+        approved command locally, and sends only known Program Change (PC),
+        Control Change (CC), and wait actions to the Axe-Fx III over USB MIDI.
+    </section>
+
+    <nav class="toc">
+        <strong>Contents</strong>
+        <ol>
+            <li><a href="#architecture">Target Architecture</a></li>
+            <li><a href="#phase1">Phase 1 — Install Software</a></li>
+            <li><a href="#phase2">Phase 2 — Configure Axe-Fx III</a></li>
+            <li><a href="#phase3">Phase 3 — Create Workspace</a></li>
+            <li><a href="#phase4">Phase 4 — OpenCode Guardrails</a></li>
+            <li><a href="#phase5">Phase 5 — Build MIDI Bridge</a></li>
+            <li><a href="#phase6">Phase 6 — Configuration File</a></li>
+            <li><a href="#phase7">Phase 7 — Build and Dry Run</a></li>
+            <li><a href="#phase8">Phase 8 — Live MIDI Testing</a></li>
+            <li><a href="#phase9">Phase 9 — Add LLM Interpretation</a></li>
+            <li><a href="#phase10">Phase 10 — Expand Safely</a></li>
+            <li><a href="#checklist">Completion Checklist</a></li>
+        </ol>
+    </nav>
+
+    <section id="architecture">
+        <h2>1. Target Architecture</h2>
+
+        <div class="architecture">
+            User text or voice request
+            ↓
+            LLM interprets intent
+            ↓
+            Approved command ID only
+            ↓
+            C# application validates command ID
+            ↓
+            Fixed PC / CC / wait sequence from config.json
+            ↓
+            Axe-Fx III over USB MIDI
+        </div>
+
+        <div class="warning">
+            <strong>Critical Design Rule.</strong><br>
+            The LLM must never transmit raw MIDI, CC values, Program Changes,
+            SysEx, preset writes, or parameter edits directly. It may select only
+            a named command that already exists in <code>config.json</code>.
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Role</th>
+                    <th>May Send MIDI?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>User</td>
+                    <td>Provides text or voice request.</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>LLM</td>
+                    <td>Selects an approved command ID or returns no action.</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>OpenCode</td>
+                    <td>Assists with project creation, code review, and troubleshooting.</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>C#/.NET bridge</td>
+                    <td>Validates commands and transmits configured MIDI messages.</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>Axe-Fx III</td>
+                    <td>Receives MIDI and changes approved sound settings.</td>
+                    <td>Receives only</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="phase1" class="page-break">
+        <h2>2. Phase 1 — Install Required Software</h2>
+
+        <h3>2.1 Install Fractal Audio software</h3>
+        <ol>
+            <li>Install the current Axe-Fx III Windows USB driver.</li>
+            <li>Install Axe-Edit III.</li>
+            <li>Install Fractal-Bot.</li>
+            <li>Connect the Axe-Fx III directly to a USB port on the PC.</li>
+            <li>Avoid USB hubs during initial testing.</li>
+        </ol>
+
+        <div class="warning">
+            <strong>Back up first.</strong><br>
+            Before changing MIDI settings, use Fractal-Bot to back up system settings
+            and any presets you plan to modify.
+        </div>
+
+        <h3>2.2 Install .NET SDK</h3>
+        <p>Install the .NET 10 SDK. Open PowerShell and verify installation:</p>
+
+        <pre><code>dotnet --info</code></pre>
+
+        <p>Confirm that the installed SDK version begins with:</p>
+
+        <pre><code>10.</code></pre>
+
+        <h3>2.3 Install OpenCode</h3>
+        <p>Use either the OpenCode Desktop application or the OpenCode CLI.</p>
+
+        <p>If using the CLI with npm:</p>
+
+        <pre><code>npm install -g @opencode/cli
+opencode --version</code></pre>
+
+        <div class="note">
+            <strong>Recommendation.</strong><br>
+            Run the actual C# MIDI bridge natively in Windows PowerShell or Windows
+            Terminal. Do not run the live USB-MIDI bridge inside WSL.
+        </div>
+    </section>
+
+    <section id="phase2">
+        <h2>3. Phase 2 — Configure the Axe-Fx III</h2>
+
+        <h3>3.1 Configure incoming MIDI</h3>
+        <p>On the Axe-Fx III front panel, open:</p>
+
+        <pre><code>SETUP → MIDI/Remote</code></pre>
+
+        <p>Set or verify:</p>
+
+        <pre><code>MIDI Channel: 1
+Receive Program Changes: ON</code></pre>
+
+        <h3>3.2 Create a test preset</h3>
+        <p>Create a low-risk test preset named:</p>
+
+        <pre><code>AI MIDI TEST</code></pre>
+
+        <p>Suggested initial chain:</p>
+
+        <pre><code>Input → Amp → Cab → Delay → Reverb → Output</code></pre>
+
+        <div class="warning">
+            <strong>Use low volume.</strong><br>
+            Keep output level conservative while testing MIDI behavior for the first
+            time.
+        </div>
+
+        <h3>3.3 Configure External Controller 1</h3>
+        <p>In <code>SETUP → MIDI/Remote</code>, configure:</p>
+
+        <pre><code>External Controller 1 CC: 21
+Initial Value: 0</code></pre>
+
+        <p>
+            CC 21 is an example. If you choose another unused CC number, use that
+            same number consistently in the Axe-Fx III and in
+            <code>config.json</code>.
+        </p>
+
+        <h3>3.4 Assign External Controller 1 to Delay Mix</h3>
+        <ol>
+            <li>Open the test preset in Axe-Edit.</li>
+            <li>Open the Delay block.</li>
+            <li>Find the <code>Mix</code> parameter.</li>
+            <li>Add a modifier/controller.</li>
+            <li>Set the modifier source to <code>External 1</code>.</li>
+            <li>Set a constrained range, for example:</li>
+        </ol>
+
+        <pre><code>Minimum: 8%
+Maximum: 32%</code></pre>
+
+        <ol start="7">
+            <li>Save the preset.</li>
+        </ol>
+
+        <p>This establishes a safe first continuous MIDI control:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>MIDI Input</th>
+                    <th>Expected Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>CC 21, value 0</td>
+                    <td>Low delay mix</td>
+                </tr>
+                <tr>
+                    <td>CC 21, value 64</td>
+                    <td>Medium delay mix</td>
+                </tr>
+                <tr>
+                    <td>CC 21, value 127</td>
+                    <td>High delay mix</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="phase3" class="page-break">
+        <h2>4. Phase 3 — Create the .NET Workspace</h2>
+
+        <p>Open PowerShell and run:</p>
+
+        <pre><code>mkdir C:\AxeFxLlmController
+cd C:\AxeFxLlmController
+
+dotnet new console --framework net10.0
+dotnet add package NAudio</code></pre>
+
+        <p>Initialize Git so you can recover from unwanted changes:</p>
+
+        <pre><code>git init
+git add .
+git commit -m "Initial .NET console project"</code></pre>
+
+        <p>Expected project structure:</p>
+
+        <pre><code>C:\AxeFxLlmController\
+├── AxeFxLlmController.csproj
+├── Program.cs
+├── bin\
+├── obj\
+└── .git\</code></pre>
+    </section>
+
+    <section id="phase4">
+        <h2>5. Phase 4 — Add OpenCode Guardrails</h2>
+
+        <p>Create a file named:</p>
+
+        <pre><code>AGENTS.md</code></pre>
+
+        <p>Paste the following content:</p>
+
+        <pre><code># Axe-Fx III LLM Controller Project Rules
+
+## Purpose
+This project is a Windows-native C#/.NET 10 application that controls a
+Fractal Axe-Fx III through USB MIDI.
+
+## Architecture
+- OpenCode is a development assistant only.
+- The compiled C# application is the only component permitted to send MIDI.
+- An LLM may choose only an approved command ID.
+- The C# application validates the command ID and sends configured MIDI actions.
+
+## MIDI Safety Requirements
+- Permit only these MIDI action types: pc, cc, wait.
+- Allow only MIDI channels 1 through 16.
+- Allow only Program Change values 0 through 127.
+- Allow only CC numbers and values 0 through 127.
+- Reject unknown commands and unsupported action types.
+- Keep dry-run mode available.
+- Log every MIDI action before it is sent.
+
+## Explicitly Prohibited
+- No SysEx support.
+- No arbitrary raw MIDI messages.
+- No preset saves, writes, overwrite operations, resets, or firmware actions.
+- No changes to global I/O, output level, routing, or system settings.
+- No direct LLM access to MIDI functions.
+- No automatic execution of live MIDI commands without user approval.
+
+## OpenCode Behavior
+- Ask before installing packages.
+- Ask before modifying config.json.
+- Ask before running dotnet run.
+- Do not access, display, save, or request API keys.
+- Prefer small, reviewable changes.
+- Show a summary of changed files after each task.</code></pre>
+
+        <h3>5.1 Start OpenCode</h3>
+
+        <pre><code>cd C:\AxeFxLlmController
+opencode</code></pre>
+
+        <p>Give OpenCode this first instruction:</p>
+
+        <pre><code>Read AGENTS.md and treat it as mandatory project guidance.
+
+Do not modify any file yet. First summarize:
+1. The target architecture.
+2. The permitted MIDI action types.
+3. The prohibited capabilities.
+4. The staged implementation plan.</code></pre>
+
+        <div class="warning">
+            <strong>Review before proceeding.</strong><br>
+            If OpenCode proposes unrestricted MIDI, arbitrary parameter editing,
+            SysEx, preset writes, or direct LLM-to-device access, correct it before
+            allowing implementation work.
+        </div>
+    </section>
+
+    <section id="phase5" class="page-break">
+        <h2>6. Phase 5 — Build the Deterministic MIDI Bridge</h2>
+
+        <p>Give OpenCode this implementation task:</p>
+
+        <pre><code>Implement Phase 1 of this project.
+
+Create a .NET 10 C# console application that:
+- Uses NAudio MIDI output.
+- Lists available Windows MIDI output ports using a /ports command.
+- Reads a config.json file.
+- Supports /run &lt;command_id&gt; for direct execution of approved commands.
+- Supports --dry-run mode, which prints actions but never opens or sends to a MIDI port.
+- Supports only pc, cc, and wait action types.
+- Validates all channels, program values, CC numbers, CC values, and wait durations.
+- Rejects unknown command IDs and unsupported action types.
+- Logs every action before sending it.
+- Does not include any LLM integration yet.
+- Does not implement SysEx.
+- Does not run dotnet run.
+- At the end, summarize all files changed and provide build instructions only.</code></pre>
+
+        <p>The application should provide these console commands:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Command</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>/ports</code></td>
+                    <td>List available Windows MIDI output ports.</td>
+                </tr>
+                <tr>
+                    <td><code>/run &lt;command_id&gt;</code></td>
+                    <td>Run one approved command from the configuration file.</td>
+                </tr>
+                <tr>
+                    <td><code>/quit</code></td>
+                    <td>Close the application.</td>
+                </tr>
+                <tr>
+                    <td><code>--dry-run</code></td>
+                    <td>Print actions without sending MIDI.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="phase6">
+        <h2>7. Phase 6 — Create the Command Configuration</h2>
+
+        <p>Create a file named:</p>
+
+        <pre><code>config.json</code></pre>
+
+        <p>Use this starter configuration:</p>
+
+        <pre><code>{
+  "midiPortName": "Axe-Fx III MIDI",
+  "midiChannel": 1,
+
+  "llm": {
+    "enabled": false,
+    "model": ""
+  },
+
+  "commands": {
+    "clean_rhythm": {
+      "description": "Load the clean rhythm sound with low delay.",
+      "requiresConfirmation": false,
+      "messages": [
+        { "type": "pc", "program": 0 },
+        { "type": "wait", "milliseconds": 300 },
+        { "type": "cc", "cc": 21, "value": 20 }
+      ]
+    },
+
+    "lead": {
+      "description": "Load the lead sound with medium delay.",
+      "requiresConfirmation": false,
+      "messages": [
+        { "type": "pc", "program": 1 },
+        { "type": "wait", "milliseconds": 300 },
+        { "type": "cc", "cc": 21, "value": 64 }
+      ]
+    },
+
+    "ambient_lead": {
+      "description": "Load the lead sound with high delay.",
+      "requiresConfirmation": false,
+      "messages": [
+        { "type": "pc", "program": 1 },
+        { "type": "wait", "milliseconds": 300 },
+        { "type": "cc", "cc": 21, "value": 110 }
+      ]
+    },
+
+    "delay_low": {
+      "description": "Set low delay in the current preset.",
+      "requiresConfirmation": false,
+      "messages": [
+        { "type": "cc", "cc": 21, "value": 20 }
+      ]
+    },
+
+    "delay_high": {
+      "description": "Set high delay in the current preset.",
+      "requiresConfirmation": false,
+      "messages": [
+        { "type": "cc", "cc": 21, "value": 110 }
+      ]
+    }
+  }
+}</code></pre>
+
+        <div class="warning">
+            <strong>Placeholder values.</strong><br>
+            The Program Change values <code>0</code> and <code>1</code> are examples.
+            Do not assume they select the desired presets on your Axe-Fx III. Test
+            each Program Change and revise the configuration only after verification.
+        </div>
+    </section>
+
+    <section id="phase7" class="page-break">
+        <h2>8. Phase 7 — Build and Dry-Run Test</h2>
+
+        <h3>8.1 Build</h3>
+
+        <pre><code>cd C:\AxeFxLlmController
+dotnet build</code></pre>
+
+        <p>Expected result:</p>
+
+        <pre><code>Build succeeded.</code></pre>
+
+        <p>If there are errors, ask OpenCode:</p>
+
+        <pre><code>Read the dotnet build errors below. Explain the cause and propose the
+smallest possible code change. Do not modify files until I approve.
+
+[paste build output]</code></pre>
+
+        <h3>8.2 Identify the Axe-Fx III MIDI port</h3>
+
+        <pre><code>dotnet run -- /ports</code></pre>
+
+        <p>Example output:</p>
+
+        <pre><code>[0] Microsoft GS Wavetable Synth
+[1] Axe-Fx III MIDI</code></pre>
+
+        <p>Copy the Axe-Fx III port name exactly into <code>config.json</code>:</p>
+
+        <pre><code>"midiPortName": "Axe-Fx III MIDI"</code></pre>
+
+        <h3>8.3 Run dry-run tests</h3>
+
+        <pre><code>dotnet run -- --dry-run</code></pre>
+
+        <p>At the application prompt, test:</p>
+
+        <pre><code>/run clean_rhythm
+/run lead
+/run ambient_lead
+/run delay_low
+/run delay_high</code></pre>
+
+        <div class="success">
+            <strong>Success condition.</strong><br>
+            The program displays the intended Program Change, wait, and Control
+            Change actions, but does not transmit MIDI in dry-run mode.
+        </div>
+    </section>
+
+    <section id="phase8">
+        <h2>9. Phase 8 — Test Live MIDI Control</h2>
+
+        <ol>
+            <li>Turn the Axe-Fx III output volume down.</li>
+            <li>Run the application without dry-run mode:</li>
+        </ol>
+
+        <pre><code>dotnet run</code></pre>
+
+        <ol start="3">
+            <li>At the prompt, run:</li>
+        </ol>
+
+        <pre><code>/run clean_rhythm</code></pre>
+
+        <p>Verify the following:</p>
+
+        <ol>
+            <li>The Axe-Fx III indicates MIDI activity.</li>
+            <li>The intended preset changes.</li>
+            <li>CC 21 changes Delay Mix in the test preset.</li>
+        </ol>
+
+        <h3>Troubleshooting</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Symptom</th>
+                    <th>Likely Check</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>MIDI activity but wrong preset loads</td>
+                    <td>Correct the Program Change number in <code>config.json</code>.</td>
+                </tr>
+                <tr>
+                    <td>Preset does not change</td>
+                    <td>Verify MIDI channel, Program Change receive setting, port name, and driver.</td>
+                </tr>
+                <tr>
+                    <td>Preset changes but Delay Mix does not</td>
+                    <td>Verify External Controller 1 uses CC 21 and is assigned as the Delay Mix modifier source.</td>
+                </tr>
+                <tr>
+                    <td>No MIDI activity</td>
+                    <td>Verify the selected Windows MIDI output port and USB driver installation.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Once direct MIDI control is reliable, create a recovery point:</p>
+
+        <pre><code>git add .
+git commit -m "Working direct Axe-Fx MIDI control"</code></pre>
+    </section>
+
+    <section id="phase9" class="page-break">
+        <h2>10. Phase 9 — Add LLM Interpretation</h2>
+
+        <h3>10.1 LLM responsibilities</h3>
+
+        <p>The LLM may translate this:</p>
+
+        <pre><code>Give me a clean rhythm sound.</code></pre>
+
+        <p>Into this:</p>
+
+        <pre><code>{
+  "command_id": "clean_rhythm",
+  "reply": "Loading the clean rhythm sound."
+}</code></pre>
+
+        <p>The LLM must not generate:</p>
+
+        <pre><code>{
+  "cc": 21,
+  "value": 95
+}</code></pre>
+
+        <h3>10.2 Add the LLM layer with OpenCode</h3>
+
+        <p>Give OpenCode this task:</p>
+
+        <pre><code>Implement Phase 2: optional LLM interpretation.
+
+Requirements:
+- Keep all existing direct MIDI behavior unchanged.
+- Add an LLM interpreter that is disabled by default.
+- Read the API key only from the OPENAI_API_KEY environment variable.
+- Never write, log, display, save, or request the API key.
+- Use the OpenAI Responses API.
+- Use strict Structured Outputs with JSON Schema.
+- The output schema must contain only:
+  1. command_id: one approved command ID from config.json, or null
+  2. reply: a short plain-language explanation
+- Do not pass raw MIDI details to the model.
+- Do not give the model tools, shell access, file access, or MIDI access.
+- Validate the returned command_id locally against config.json.
+- If the result is null, invalid, incomplete, refused, or malformed, send no MIDI.
+- Keep --dry-run behavior fully functional.
+- Do not run dotnet run.
+- Show all changed files and explain the failure-handling behavior.</code></pre>
+
+        <h3>10.3 Store the API key securely</h3>
+
+        <p>In PowerShell:</p>
+
+        <pre><code>setx OPENAI_API_KEY "your_api_key_here"</code></pre>
+
+        <div class="warning">
+            <strong>Protect the key.</strong><br>
+            Do not place the API key in <code>config.json</code>, source code, Git,
+            screenshots, logs, or OpenCode prompts.
+        </div>
+
+        <h3>10.4 Enable LLM mode</h3>
+
+        <p>After reviewing and building the implementation, update:</p>
+
+        <pre><code>"llm": {
+  "enabled": true,
+  "model": "gpt-4.1"
+}</code></pre>
+
+        <p>
+            Use a model available to your account that supports strict structured
+            output. The exact model name can be changed later without changing the
+            MIDI control design.
+        </p>
+
+        <h3>10.5 Test the LLM in dry-run mode</h3>
+
+        <pre><code>dotnet run -- --dry-run</code></pre>
+
+        <p>Test clear requests:</p>
+
+        <pre><code>Give me a clean rhythm sound.
+
+I need a huge ambient lead sound.</code></pre>
+
+        <p>Test unclear or prohibited requests:</p>
+
+        <pre><code>Make it warmer and more modern.
+
+Overwrite my lead preset and change the amp model.</code></pre>
+
+        <div class="success">
+            <strong>Expected result.</strong><br>
+            Clear requests resolve to an approved command ID. Unclear, unsupported,
+            malformed, or prohibited requests resolve to <code>null</code> and send
+            no MIDI.
+        </div>
+    </section>
+
+    <section id="phase10">
+        <h2>11. Phase 10 — Expand Safely</h2>
+
+        <p>Add one capability at a time, following this order:</p>
+
+        <ol>
+            <li>Additional preset commands.</li>
+            <li>Scene Select commands.</li>
+            <li>External Controller 2 for Reverb Amount.</li>
+            <li>External Controller 3 for Solo Boost.</li>
+            <li>A known-safe “home” rhythm sound.</li>
+            <li>Confirmation-required commands.</li>
+            <li>A WPF desktop interface.</li>
+            <li>Push-to-talk voice input.</li>
+        </ol>
+
+        <h3>Example: confirmation-required command</h3>
+
+        <pre><code>"solo_boost": {
+  "description": "Enable the configured solo boost.",
+  "requiresConfirmation": true,
+  "messages": [
+    { "type": "cc", "cc": 24, "value": 127 }
+  ]
+}</code></pre>
+
+        <p>
+            The application should require a deliberate confirmation before it sends
+            this command.
+        </p>
+
+        <h3>Preferred operating cycle</h3>
+
+        <div class="architecture">
+            1. Ask OpenCode to propose a small change.
+            2. Review all changed files.
+            3. Run dotnet build.
+            4. Run dotnet run -- --dry-run.
+            5. Test one live command at low volume.
+            6. Commit the verified change with Git.
+        </div>
+    </section>
+
+    <section id="checklist" class="page-break">
+        <h2>12. Completion Checklist</h2>
+
+        <ul class="checklist">
+            <li>Installed the Axe-Fx III Windows USB driver.</li>
+            <li>Installed Axe-Edit III and Fractal-Bot.</li>
+            <li>Backed up system settings and relevant presets.</li>
+            <li>Installed the .NET 10 SDK.</li>
+            <li>Installed OpenCode Desktop or CLI.</li>
+            <li>Created the .NET project and initialized Git.</li>
+            <li>Created and reviewed <code>AGENTS.md</code>.</li>
+            <li>Configured Axe-Fx III MIDI Channel 1 and Program Change reception.</li>
+            <li>Configured External Controller 1 and Delay Mix modifier mapping.</li>
+            <li>Listed and selected the correct Axe-Fx III Windows MIDI port.</li>
+            <li>Passed all dry-run tests.</li>
+            <li>Verified live Program Change behavior.</li>
+            <li>Verified live CC control of Delay Mix.</li>
+            <li>Committed a working direct-MIDI baseline.</li>
+            <li>Added LLM interpretation only after direct MIDI control worked.</li>
+            <li>Confirmed that unsupported requests result in no MIDI transmission.</li>
+            <li>Retained front-panel or physical-controller fallback capability.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>13. Final Operating Principle</h2>
+
+        <div class="bluf">
+            <strong>Keep the LLM expressive, but keep the MIDI bridge deterministic.</strong><br>
+            The LLM may understand phrases such as “ambient lead,” “clean rhythm,”
+            or “more delay.” The local C# application decides whether that phrase
+            maps to a preapproved action and sends only the known MIDI sequence
+            stored in the configuration file.
+        </div>
+    </section>
+
+    <footer>
+        <p>
+            Document title: Axe-Fx III LLM Controller — Windows .NET and OpenCode Guide<br>
+            Intended workflow: Native Windows C#/.NET MIDI bridge, OpenCode-assisted development,
+            USB MIDI control, and allowlisted LLM command selection.
+        </p>
+    </footer>
+</body>
+</html>
